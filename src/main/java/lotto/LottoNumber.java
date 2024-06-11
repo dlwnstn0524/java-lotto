@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class LottoNumber {
     private final int num;
-    private static HashMap<Integer, LottoNumber> lottoNumbers = new HashMap<>();
+    private static final HashMap<Integer, LottoNumber> lottoNumbers = new HashMap<>();
 
     public static LottoNumber of(int num) {
         if (lottoNumbers.containsKey(num)) return lottoNumbers.get(num);

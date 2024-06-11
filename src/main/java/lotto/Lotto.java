@@ -48,6 +48,4 @@ public class Lotto {
     private LottoRank matchFiveNumbers(WinningLotto winningLotto) {
         return numbers.contains(winningLotto.getBonus()) ? LottoRank.SECOND : LottoRank.THIRD;
     }
-
-
 }

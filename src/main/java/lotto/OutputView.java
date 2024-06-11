@@ -6,11 +6,18 @@ import java.util.stream.Collectors;
 
 public class OutputView {
 
-    public static void showLottos(List<Lotto> lottos){
+    public static void showLottos(List<Lotto> manualLottos, List<Lotto> autoLottos) {
 
-        System.out.println(lottos.size() + "개를 구매했습니다.");
+        System.out.println("수동으로 " + manualLottos.size() + "장, 자동으로 " + autoLottos.size() + "개를 구매했습니다.");
 
-        for (Lotto lotto : lottos) {
+        for (Lotto lotto : manualLottos) {
+            System.out.println(lotto.getNumbers()
+                    .stream()
+                    .map(LottoNumber::getNum)
+                    .collect(Collectors.toList()));
+        }
+
+        for (Lotto lotto : autoLottos) {
             System.out.println(lotto.getNumbers()
                     .stream()
                     .map(LottoNumber::getNum)

@@ -21,10 +21,22 @@ public class LottoController {
 
     private void buy() throws IOException {
         int money = InputView.requestUserPrice();
-        List<Lotto> newLottos = makeLottos(money);
+        int count = InputView.requestManualCount();
+        List<Lotto> manualLottos = InputView.requestManualLottos(count).stream()
+                .map(manualInputs -> {
+                    Set<LottoNumber> lottoNumbers = manualInputs.stream()
+                            .map(LottoNumber::of)
+                            .collect(Collectors.toSet());
+                    return new Lotto(lottoNumbers);
+                })
+                .collect(Collectors.toList());
+        List<Lotto> newLottos = makeLottos(money - count * Lotto.PRICE);
+
         lottos.clear();
         lottos.addAll(newLottos);
-        OutputView.showLottos(this.lottos);
+        lottos.addAll(manualLottos);
+
+        OutputView.showLottos(manualLottos, newLottos);
     }
 
     private List<Lotto> makeLottos(int money) {
@@ -32,6 +44,7 @@ public class LottoController {
                 .boxed()
                 .map(LottoNumber::of)
                 .collect(Collectors.toList());
+
         int count = money / Lotto.PRICE;
 
         return IntStream.range(0, count)
