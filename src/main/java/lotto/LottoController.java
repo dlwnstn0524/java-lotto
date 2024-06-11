@@ -60,7 +60,7 @@ public class LottoController {
                 .map(LottoNumber::of)
                 .collect(Collectors.toSet());
         LottoNumber bonus = LottoNumber.of(InputView.requestBonus());
-        WinningLotto winningLotto = new WinningLotto(winningNumbers, bonus);
+        WinningLotto winningLotto = new WinningLotto(new Lotto(winningNumbers), bonus);
         Map<LottoRank, Long> lottoRanks = getLottoRanks(winningLotto);
         double profitRatio = getProfitRatio(lottoRanks);
         LottoGameResult result = new LottoGameResult(
@@ -83,7 +83,7 @@ public class LottoController {
 
     private Map<LottoRank, Long> getLottoRanks(WinningLotto winningLotto) {
         return lottos.stream()
-                .map(lotto -> lotto.match(winningLotto))
+                .map(winningLotto::match)
                 .collect(Collectors.groupingBy(
                         rank -> rank,
                         Collectors.counting()

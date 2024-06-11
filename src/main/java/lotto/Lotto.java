@@ -1,8 +1,9 @@
 package lotto;
 
+import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Lotto {
 
@@ -13,7 +14,11 @@ public class Lotto {
 
     public Lotto(Set<LottoNumber> numbers) {
         validation(numbers);
-        this.numbers = numbers;
+        this.numbers = new HashSet<>(numbers);
+    }
+
+    public Lotto(int... nums) {
+        this(Arrays.stream(nums).mapToObj(LottoNumber::of).collect(Collectors.toSet()));
     }
 
     private void validation(Set<LottoNumber> numbers) {
@@ -23,29 +28,19 @@ public class Lotto {
     }
 
     public Set<LottoNumber> getNumbers() {
-        return numbers;
+        return new HashSet<>(numbers);
     }
 
-    public LottoRank match(WinningLotto winningLotto) {
-        int unionCnt = getUnionCnt(winningLotto);
-
-        if (unionCnt == 3) return LottoRank.FIFTH;
-        if (unionCnt == 4) return LottoRank.FOURTH;
-        if (unionCnt == 5) return matchFiveNumbers(winningLotto);
-        if (unionCnt == 6) return LottoRank.FIRST;
-
-        return LottoRank.NONE;
+    public boolean contains(LottoNumber number) {
+        return numbers.contains(number);
     }
 
-    private int getUnionCnt(WinningLotto winningLotto) {
+    public int matchCount(Lotto lotto) {
         Set<LottoNumber> temp = new HashSet<>(numbers);
 
-        temp.retainAll(winningLotto.getNumbers());
+        temp.retainAll(lotto.numbers);
 
         return temp.size();
     }
 
-    private LottoRank matchFiveNumbers(WinningLotto winningLotto) {
-        return numbers.contains(winningLotto.getBonus()) ? LottoRank.SECOND : LottoRank.THIRD;
-    }
 }

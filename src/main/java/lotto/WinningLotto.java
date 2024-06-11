@@ -1,33 +1,36 @@
 package lotto;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class WinningLotto {
 
-    private final Set<LottoNumber> numbers;
     private final LottoNumber bonus;
+    private final Lotto lotto;
 
-    public WinningLotto(Set<LottoNumber> numbers, LottoNumber bonus) {
-        validation(numbers, bonus);
-        this.numbers = numbers;
+
+    public WinningLotto(Lotto lotto, LottoNumber bonus) {
+        if (lotto.contains(bonus))
+            throw new IllegalArgumentException("보너스 번호는 당첨 번호들과 중복될 수 없습니다.");
+        this.lotto = lotto;
         this.bonus = bonus;
     }
 
-    private void validation(Set<LottoNumber> numbers, LottoNumber bonus) {
-        if(numbers == null){
-            throw new IllegalArgumentException("numbers cannot be null");
-        }
-        Set<LottoNumber> validSet = new HashSet<>(numbers);
-        validSet.add(bonus);
-        if (validSet.size() == numbers.size()){
-            throw new IllegalArgumentException("보너스 숫자와 당첨 숫자는 중복되면 안됩니다");
-        }
 
+    public LottoRank match(Lotto lotto) {
+        int unionCnt = lotto.matchCount(this.lotto);
+
+        if (unionCnt == 3) return LottoRank.FIFTH;
+        if (unionCnt == 4) return LottoRank.FOURTH;
+        if (unionCnt == 5) return matchFiveNumbers(lotto);
+        if (unionCnt == 6) return LottoRank.FIRST;
+
+        return LottoRank.NONE;
     }
 
-    public Set<LottoNumber> getNumbers() {
-        return numbers;
+    private LottoRank matchFiveNumbers(Lotto lotto) {
+        return lotto.contains(bonus)?LottoRank.SECOND:LottoRank.THIRD;
+    }
+
+    public Lotto getLotto() {
+        return lotto;
     }
 
     public LottoNumber getBonus() {
