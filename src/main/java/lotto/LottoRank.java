@@ -14,6 +14,16 @@ public enum LottoRank {
         this.price = price;
     }
 
+    public static LottoRank from(int unionCount, boolean bonusMatched) {
+        if (unionCount == 3) return LottoRank.FIFTH;
+        if (unionCount == 4) return LottoRank.FOURTH;
+        if (unionCount == 5 && !bonusMatched) return LottoRank.THIRD;
+        if (unionCount == 5 && bonusMatched) return LottoRank.SECOND;
+        if (unionCount == 6) return LottoRank.FIRST;
+
+        return LottoRank.NONE;
+    }
+
     public long getPrice() {
         return price;
     }

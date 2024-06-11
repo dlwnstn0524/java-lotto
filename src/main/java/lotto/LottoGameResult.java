@@ -8,6 +8,7 @@ public class LottoGameResult {
     private final long fifth;
     private final double profitRatio;
 
+
     public LottoGameResult(long first, long second, long third, long fourth, long fifth, double profitRatio) {
         this.first = first;
         this.second = second;
